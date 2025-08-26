@@ -136,7 +136,7 @@ const SubAdminDashboard: React.FC = () => {
   };
 
   const handleViewAllSiteVisits = () => {
-    navigate('/subadmin/site-visits');
+    navigate("/subadmin/dashboard");
   };
 
   const getPriorityColor = (priority: string) => {

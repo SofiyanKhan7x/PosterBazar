@@ -25,40 +25,56 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ isOpen, onClose, onItemCoun
   const [editingItem, setEditingItem] = useState<string | null>(null);
   const [editDates, setEditDates] = useState({ start_date: '', end_date: '' });
 
-  useEffect(() => {
-    if (isOpen && user) {
-      loadCart();
-    }
-  }, [isOpen, user]);
+useEffect(
+  () => {
+    const handleCartUpdated = (e: Event) => {
+      const ce = e as CustomEvent;
+      console.log("cartUpdated event received (ShoppingCart):", ce.detail);
+      // defensive: only set if detail present
+      if (ce?.detail) {
+        setCart(ce.detail);
+      } else {
+        // no detail -> attempt to reload from server
+        if (user) loadCart();
+      }
+    };
+
+    window.addEventListener("cartUpdated", handleCartUpdated);
+    return () => {
+      window.removeEventListener("cartUpdated", handleCartUpdated);
+    };
+  },
+  [
+    /* no deps */
+  ]
+);
+
+
+
+
+useEffect(() => {
+  // If modal opens, always fetch fresh cart. This fixes the "missed event" case.
+  if (isOpen && user) {
+    loadCart();
+  }
+}, [isOpen, user]);
+
 
   useEffect(() => {
     onItemCountChange(cart?.total_items || 0);
   }, [cart?.total_items, onItemCountChange]);
 
-  // const loadCart = async () => {
-  //   if (!user) return;
 
-  //   try {
-  //     setLoading(true);
-  //     const cartData = await CartService.getUserCart(user.id);
-  //     setCart(cartData);
-  //   } catch (error) {
-  //     console.error('Error loading cart:', error);
-  //     setMessage('Failed to load cart');
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   const loadCart = async () => {
     if (!user) return;
-
+    setLoading(true);
     try {
-      setLoading(true);
       const cartData = await CartService.getUserCart(user.id);
+      console.log("Loaded cart data:", cartData);
       setCart(cartData);
     } catch (error) {
-      console.error("Error loading cart:", error);
+      console.error("Failed to load cart: ", error);
       setMessage("Failed to load cart");
     } finally {
       setLoading(false);
@@ -416,3 +432,5 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ isOpen, onClose, onItemCoun
 };
 
 export default ShoppingCart;
+
+

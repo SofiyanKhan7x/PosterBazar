@@ -189,7 +189,7 @@ const VerificationForm: React.FC = () => {
         
         // Redirect after successful submission
         setTimeout(() => {
-          navigate('/subadmin/site-visits');
+          navigate("/subadmin/dashboard");
         }, 2000);
       } else {
         // Just save as draft (not implemented in this demo)
@@ -218,12 +218,18 @@ const VerificationForm: React.FC = () => {
   if (!billboard) {
     return (
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Billboard Not Found</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+          Billboard Not Found
+        </h2>
         <p className="text-gray-600 dark:text-gray-300 mb-6">
-          The billboard you're trying to verify doesn't exist or has been removed.
+          The billboard you're trying to verify doesn't exist or has been
+          removed.
         </p>
-        <Link to="/subadmin/site-visits" className="text-blue-900 dark:text-blue-400 hover:underline">
-          Back to Site Visits
+        <Link
+          to="/subadmin/dashboard"
+          className="text-blue-900 dark:text-blue-400 hover:underline"
+        >
+          Back to SubAdmin Dashboard
         </Link>
       </div>
     );
@@ -241,18 +247,20 @@ const VerificationForm: React.FC = () => {
   ];
 
   return (
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <Link 
-        to="/subadmin/site-visits" 
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <Link
+        to="/subadmin/dashboard"
         className="inline-flex items-center text-blue-900 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 mb-8"
       >
         <ArrowLeft className="h-5 w-5 mr-2" />
-        Back to Site Visits
+        Back to SubAdmin Dashboard
       </Link>
 
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md">
         <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Billboard Verification</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+            Billboard Verification
+          </h1>
           <p className="text-gray-600 dark:text-gray-300 mt-2">
             Complete the physical verification for this billboard location.
           </p>
@@ -260,13 +268,15 @@ const VerificationForm: React.FC = () => {
 
         <div className="p-6">
           {message && (
-            <div className={`mb-6 p-4 rounded-lg border ${
-              message.includes('successfully') 
-                ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 text-green-800 dark:text-green-200'
-                : 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-800 dark:text-red-200'
-            }`}>
+            <div
+              className={`mb-6 p-4 rounded-lg border ${
+                message.includes("successfully")
+                  ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800 text-green-800 dark:text-green-200"
+                  : "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-800 dark:text-red-200"
+              }`}
+            >
               <div className="flex items-center">
-                {message.includes('successfully') ? (
+                {message.includes("successfully") ? (
                   <CheckCircle className="h-5 w-5 mr-2" />
                 ) : (
                   <AlertTriangle className="h-5 w-5 mr-2" />
@@ -278,27 +288,49 @@ const VerificationForm: React.FC = () => {
 
           {/* Billboard Information */}
           <div className="mb-8 p-6 bg-gray-50 dark:bg-gray-700 rounded-lg">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Billboard Information</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              Billboard Information
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Title</p>
-                <p className="font-medium text-gray-900 dark:text-white">{billboard.title}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Title
+                </p>
+                <p className="font-medium text-gray-900 dark:text-white">
+                  {billboard.title}
+                </p>
               </div>
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Owner</p>
-                <p className="font-medium text-gray-900 dark:text-white">Billboard Owner</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Owner
+                </p>
+                <p className="font-medium text-gray-900 dark:text-white">
+                  Billboard Owner
+                </p>
               </div>
               <div className="md:col-span-2">
-                <p className="text-sm text-gray-600 dark:text-gray-400">Location</p>
-                <p className="font-medium text-gray-900 dark:text-white">{billboard.location_address}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Location
+                </p>
+                <p className="font-medium text-gray-900 dark:text-white">
+                  {billboard.location_address}
+                </p>
               </div>
               <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Dimensions</p>
-                <p className="font-medium text-gray-900 dark:text-white">{billboard.dimensions}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Dimensions
+                </p>
+                <p className="font-medium text-gray-900 dark:text-white">
+                  {billboard.dimensions}
+                </p>
               </div>
               <div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Facing</p>
-                <p className="font-medium text-gray-900 dark:text-white">{billboard.facing}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Facing
+                </p>
+                <p className="font-medium text-gray-900 dark:text-white">
+                  {billboard.facing}
+                </p>
               </div>
               {billboard.google_maps_link && (
                 <div className="md:col-span-2">
@@ -318,7 +350,9 @@ const VerificationForm: React.FC = () => {
 
           {/* Photo Upload Section */}
           <div className="mb-8">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Required Photos</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              Required Photos
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Owner Selfie */}
               <div>
@@ -327,13 +361,13 @@ const VerificationForm: React.FC = () => {
                 </label>
                 {previews.ownerSelfie ? (
                   <div className="relative">
-                    <img 
-                      src={previews.ownerSelfie} 
-                      alt="Owner selfie" 
+                    <img
+                      src={previews.ownerSelfie}
+                      alt="Owner selfie"
                       className="w-full h-48 object-cover rounded-lg border border-gray-200 dark:border-gray-600"
                     />
                     <button
-                      onClick={() => removeFile('ownerSelfie')}
+                      onClick={() => removeFile("ownerSelfie")}
                       className="absolute top-2 right-2 p-1 bg-red-600 text-white rounded-full hover:bg-red-700"
                     >
                       <X className="h-4 w-4" />
@@ -351,7 +385,7 @@ const VerificationForm: React.FC = () => {
                       capture="user"
                       onChange={(e) => {
                         const file = e.target.files?.[0];
-                        if (file) handleFileUpload('ownerSelfie', file);
+                        if (file) handleFileUpload("ownerSelfie", file);
                       }}
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                     />
@@ -366,13 +400,13 @@ const VerificationForm: React.FC = () => {
                 </label>
                 {previews.billboardPhoto ? (
                   <div className="relative">
-                    <img 
-                      src={previews.billboardPhoto} 
-                      alt="Billboard photo" 
+                    <img
+                      src={previews.billboardPhoto}
+                      alt="Billboard photo"
                       className="w-full h-48 object-cover rounded-lg border border-gray-200 dark:border-gray-600"
                     />
                     <button
-                      onClick={() => removeFile('billboardPhoto')}
+                      onClick={() => removeFile("billboardPhoto")}
                       className="absolute top-2 right-2 p-1 bg-red-600 text-white rounded-full hover:bg-red-700"
                     >
                       <X className="h-4 w-4" />
@@ -390,7 +424,7 @@ const VerificationForm: React.FC = () => {
                       capture="environment"
                       onChange={(e) => {
                         const file = e.target.files?.[0];
-                        if (file) handleFileUpload('billboardPhoto', file);
+                        if (file) handleFileUpload("billboardPhoto", file);
                       }}
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                     />
@@ -402,8 +436,10 @@ const VerificationForm: React.FC = () => {
 
           {/* Verification Details */}
           <div className="mb-8">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Verification Details</h2>
-            
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              Verification Details
+            </h2>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -411,10 +447,12 @@ const VerificationForm: React.FC = () => {
                 </label>
                 <select
                   value={verificationData.locationAccuracy}
-                  onChange={(e) => setVerificationData(prev => ({
-                    ...prev,
-                    locationAccuracy: e.target.value as any
-                  }))}
+                  onChange={(e) =>
+                    setVerificationData((prev) => ({
+                      ...prev,
+                      locationAccuracy: e.target.value as any,
+                    }))
+                  }
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                 >
                   <option value="exact">Exact Match</option>
@@ -429,10 +467,12 @@ const VerificationForm: React.FC = () => {
                 </label>
                 <select
                   value={verificationData.structuralCondition}
-                  onChange={(e) => setVerificationData(prev => ({
-                    ...prev,
-                    structuralCondition: e.target.value as any
-                  }))}
+                  onChange={(e) =>
+                    setVerificationData((prev) => ({
+                      ...prev,
+                      structuralCondition: e.target.value as any,
+                    }))
+                  }
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                 >
                   <option value="excellent">Excellent</option>
@@ -451,15 +491,19 @@ const VerificationForm: React.FC = () => {
                   min="1"
                   max="10"
                   value={verificationData.visibilityRating}
-                  onChange={(e) => setVerificationData(prev => ({
-                    ...prev,
-                    visibilityRating: parseInt(e.target.value)
-                  }))}
+                  onChange={(e) =>
+                    setVerificationData((prev) => ({
+                      ...prev,
+                      visibilityRating: parseInt(e.target.value),
+                    }))
+                  }
                   className="w-full"
                 />
                 <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
                   <span>Poor (1)</span>
-                  <span className="font-medium">{verificationData.visibilityRating}</span>
+                  <span className="font-medium">
+                    {verificationData.visibilityRating}
+                  </span>
                   <span>Excellent (10)</span>
                 </div>
               </div>
@@ -479,7 +523,9 @@ const VerificationForm: React.FC = () => {
                       onChange={() => handleIssueToggle(issue)}
                       className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                     />
-                    <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">{issue}</span>
+                    <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                      {issue}
+                    </span>
                   </label>
                 ))}
               </div>
@@ -492,10 +538,12 @@ const VerificationForm: React.FC = () => {
               </label>
               <textarea
                 value={verificationData.verificationNotes}
-                onChange={(e) => setVerificationData(prev => ({
-                  ...prev,
-                  verificationNotes: e.target.value
-                }))}
+                onChange={(e) =>
+                  setVerificationData((prev) => ({
+                    ...prev,
+                    verificationNotes: e.target.value,
+                  }))
+                }
                 rows={4}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                 placeholder="Provide detailed notes about the verification process, any issues found, and overall assessment..."
@@ -509,10 +557,12 @@ const VerificationForm: React.FC = () => {
               </label>
               <textarea
                 value={verificationData.accessibilityNotes}
-                onChange={(e) => setVerificationData(prev => ({
-                  ...prev,
-                  accessibilityNotes: e.target.value
-                }))}
+                onChange={(e) =>
+                  setVerificationData((prev) => ({
+                    ...prev,
+                    accessibilityNotes: e.target.value,
+                  }))
+                }
                 rows={2}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                 placeholder="Notes about access to the billboard location, parking, safety considerations..."
@@ -526,10 +576,12 @@ const VerificationForm: React.FC = () => {
               </label>
               <textarea
                 value={verificationData.recommendations}
-                onChange={(e) => setVerificationData(prev => ({
-                  ...prev,
-                  recommendations: e.target.value
-                }))}
+                onChange={(e) =>
+                  setVerificationData((prev) => ({
+                    ...prev,
+                    recommendations: e.target.value,
+                  }))
+                }
                 rows={3}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                 placeholder="Any recommendations for improvements or maintenance..."
@@ -547,11 +599,19 @@ const VerificationForm: React.FC = () => {
                     type="radio"
                     name="verification"
                     checked={verificationData.isVerified === true}
-                    onChange={() => setVerificationData(prev => ({ ...prev, isVerified: true }))}
+                    onChange={() =>
+                      setVerificationData((prev) => ({
+                        ...prev,
+                        isVerified: true,
+                      }))
+                    }
                     className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300"
                   />
                   <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                    <strong className="text-green-600 dark:text-green-400">Approve</strong> - Billboard meets all requirements
+                    <strong className="text-green-600 dark:text-green-400">
+                      Approve
+                    </strong>{" "}
+                    - Billboard meets all requirements
                   </span>
                 </label>
                 <label className="flex items-center">
@@ -559,11 +619,19 @@ const VerificationForm: React.FC = () => {
                     type="radio"
                     name="verification"
                     checked={verificationData.isVerified === false}
-                    onChange={() => setVerificationData(prev => ({ ...prev, isVerified: false }))}
+                    onChange={() =>
+                      setVerificationData((prev) => ({
+                        ...prev,
+                        isVerified: false,
+                      }))
+                    }
                     className="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300"
                   />
                   <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                    <strong className="text-red-600 dark:text-red-400">Reject</strong> - Billboard has issues that need to be addressed
+                    <strong className="text-red-600 dark:text-red-400">
+                      Reject
+                    </strong>{" "}
+                    - Billboard has issues that need to be addressed
                   </span>
                 </label>
               </div>
@@ -573,7 +641,7 @@ const VerificationForm: React.FC = () => {
           {/* Action Buttons */}
           <div className="flex justify-end space-x-4">
             <button
-              onClick={() => handleSubmit('save')}
+              onClick={() => handleSubmit("save")}
               disabled={submitting}
               className="px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors flex items-center disabled:opacity-50"
             >
@@ -581,7 +649,7 @@ const VerificationForm: React.FC = () => {
               Save Draft
             </button>
             <button
-              onClick={() => handleSubmit('submit')}
+              onClick={() => handleSubmit("submit")}
               disabled={submitting}
               className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors flex items-center disabled:opacity-50"
             >
@@ -595,7 +663,7 @@ const VerificationForm: React.FC = () => {
           </div>
         </div>
       </div>
-      </div>
+    </div>
   );
 };
 

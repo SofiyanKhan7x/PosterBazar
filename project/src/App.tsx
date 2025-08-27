@@ -55,7 +55,7 @@ import VendorAdLanding from './pages/VendorAdLanding';
 
 // Sub-Admin Dashboard Pages
 import SubAdminDashboard from './pages/subadmin/SubAdminDashboard';
-import SiteVisitManagement from './pages/subadmin/SiteVisitManagement';
+// import SiteVisitManagement from './pages/subadmin/SiteVisitManagement';
 import VerificationForm from './pages/subadmin/VerificationForm';
 import VerificationHistory from './pages/subadmin/VerificationHistory';
 
@@ -287,11 +287,11 @@ function App() {
                     <SubAdminDashboard />
                   </ProtectedRoute>
                 } />
-                <Route path="subadmin/site-visits" element={
+                {/* <Route path="subadmin/site-visits" element={
                   <ProtectedRoute allowedRoles={['sub_admin']}>
                     <SiteVisitManagement />
                   </ProtectedRoute>
-                } />
+                } /> */}
                 <Route path="subadmin/verify/:billboardId" element={
                   <ProtectedRoute allowedRoles={['sub_admin']}>
                     <VerificationForm />

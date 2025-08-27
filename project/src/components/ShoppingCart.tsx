@@ -35,6 +35,21 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ isOpen, onClose, onItemCoun
     onItemCountChange(cart?.total_items || 0);
   }, [cart?.total_items, onItemCountChange]);
 
+  // const loadCart = async () => {
+  //   if (!user) return;
+
+  //   try {
+  //     setLoading(true);
+  //     const cartData = await CartService.getUserCart(user.id);
+  //     setCart(cartData);
+  //   } catch (error) {
+  //     console.error('Error loading cart:', error);
+  //     setMessage('Failed to load cart');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const loadCart = async () => {
     if (!user) return;
 
@@ -43,12 +58,15 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({ isOpen, onClose, onItemCoun
       const cartData = await CartService.getUserCart(user.id);
       setCart(cartData);
     } catch (error) {
-      console.error('Error loading cart:', error);
-      setMessage('Failed to load cart');
+      console.error("Error loading cart:", error);
+      setMessage("Failed to load cart");
     } finally {
       setLoading(false);
     }
   };
+
+
+
 
   const handleRemoveItem = async (itemId: string) => {
     if (!user) return;

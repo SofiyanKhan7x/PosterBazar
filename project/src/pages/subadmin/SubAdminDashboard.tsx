@@ -83,8 +83,8 @@ const SubAdminDashboard: React.FC = () => {
       
       setStats({
         ...dashboardStats,
-        assignedBillboards: [],
-        pendingBillboards: dashboardStats.pendingBillboards
+        assignedBillboards: dashboardStats.assignedBillboards,
+        pendingBillboards: dashboardStats.pendingBillboards,
       });
       
     } catch (err) {
@@ -115,8 +115,8 @@ const SubAdminDashboard: React.FC = () => {
       const dashboardStats = await getSubAdminDashboardStats(user.id);
       setStats({
         ...dashboardStats,
-        assignedBillboards: [],
-        pendingBillboards: dashboardStats.pendingBillboards
+        assignedBillboards: dashboardStats.assignedBillboards,
+        pendingBillboards: dashboardStats.pendingBillboards,
       });
       setError(null);
     } catch (err) {
@@ -136,7 +136,7 @@ const SubAdminDashboard: React.FC = () => {
   };
 
   const handleViewAllSiteVisits = () => {
-    navigate('/subadmin/site-visits');
+    navigate("/subadmin/dashboard");
   };
 
   const getPriorityColor = (priority: string) => {
@@ -451,3 +451,5 @@ const SubAdminDashboard: React.FC = () => {
 };
 
 export default SubAdminDashboard;
+
+

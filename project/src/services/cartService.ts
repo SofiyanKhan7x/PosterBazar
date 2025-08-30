@@ -21,69 +21,55 @@ import {
  */
 
 export class CartService {
-  // Get or create cart session id for user (create only if none exists)
+ 
+
   static async getOrCreateCartSession(userId: string): Promise<string> {
     if (!supabase) {
       throw new Error("Database service not available");
     }
 
-    try {
-      // Look for an existing active session for this user
-      const { data: existingSession, error: selectError } = await supabase
-        .from("cart_sessions")
-        .select("id")
-        .eq("user_id", userId)
-        .eq("is_active", true)
-        .gt("expires_at", new Date().toISOString())
-        .maybeSingle();
+    // 1. Check for existing active cart
+    const { data: existingCart, error: selectError } = await supabase
+      .from("cart_sessions")
+      .select("id")
+      .eq("user_id", userId)
+      .eq("is_active", true)
+      .maybeSingle();
 
-      if (selectError) {
-        // If there's an error querying, log and continue to attempt creation
-        console.warn("getOrCreateCartSession: select error", selectError);
-      }
-      if (existingSession && existingSession.id) {
-        return existingSession.id;
-      }
-
-      // No existing session -> create one
-      const { data: newSession, error: insertError } = await supabase
-        .from("cart_sessions")
-        .insert({
-          user_id: userId,
-          session_token: `cart_${userId}_${Date.now()}_${Math.random()
-            .toString(36)
-            .substring(2, 15)}`,
-          expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // 24 hours
-          is_active: true,
-        })
-        .select("id")
-        .single();
-
-      if (insertError) {
-        // Race: another process might have created a session at the same time.
-        // Re-query for an existing session and return that if present.
-        console.warn(
-          "getOrCreateCartSession: insert error, retry selecting",
-          insertError
-        );
-        const { data: retrySession } = await supabase
-          .from("cart_sessions")
-          .select("id")
-          .eq("user_id", userId)
-          .eq("is_active", true)
-          .gt("expires_at", new Date().toISOString())
-          .maybeSingle();
-
-        if (retrySession && retrySession.id) return retrySession.id;
-
-        throw insertError;
-      }
-
-      return newSession.id;
-    } catch (error) {
-      console.error("Error creating cart session:", error);
-      throw error;
+    if (selectError && selectError.code !== "PGRST116") {
+      console.error("getOrCreateCartSession selectError:", selectError);
+      throw selectError;
     }
+
+    if (existingCart) {
+      return existingCart.id; // ✅ reuse active cart
+    }
+
+    // 2. Generate a new session_token
+    const sessionToken = `cart_${userId}_${Date.now()}_${Math.random()
+      .toString(36)
+      .substring(2, 10)}`;
+
+    // 3. Insert a new cart session
+    const { data: newCart, error: insertError } = await supabase
+      .from("cart_sessions")
+      .insert([
+        {
+          user_id: userId,
+          session_token: sessionToken,
+          is_active: true,
+          expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+        },
+      ])
+      .select("id")
+      .single();
+
+    if (insertError) {
+      console.error("getOrCreateCartSession insertError:", insertError);
+      throw insertError;
+    }
+
+    return newCart.id;
   }
 
   // Get cart item count for user (will create a session if none exists)
@@ -248,7 +234,7 @@ export class CartService {
           .from("billboards")
           .select("price_per_day")
           .eq("id", billboardId)
-          .single();
+          .maybeSingle();
 
         if (billboardError) throw billboardError;
         finalPricePerDay = Number(billboard.price_per_day);

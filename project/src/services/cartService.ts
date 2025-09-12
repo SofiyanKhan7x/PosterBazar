@@ -2,6 +2,7 @@
 
 
 
+
 import { supabase } from "./supabase";
 import {
   CartSession,
@@ -21,8 +22,6 @@ import {
  */
 
 export class CartService {
- 
-
   static async getOrCreateCartSession(userId: string): Promise<string> {
     if (!supabase) {
       throw new Error("Database service not available");

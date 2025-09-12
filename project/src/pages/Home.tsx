@@ -266,7 +266,8 @@ const Home: React.FC = () => {
       </section>
       
       {/* Popup Ads */}
-      <VendorAdDisplay position="popup" maxAds={1} />
+      {/* <VendorAdDisplay position="popup" maxAds={1} /> */}
+      <VendorAdDisplay  />
     </div>
   );
 };

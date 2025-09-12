@@ -91,7 +91,7 @@ const Checkout: React.FC = () => {
       const paymentId = `PAY_${Date.now()}_${Math.random().toString(36).substring(2)}`;
       
       // Process cart checkout
-      const result = await CartService.processCartCheckout(user.id);
+      const result = await CartService.processCheckout(user.id);
       
       if (result.success) {
         // Navigate to success page

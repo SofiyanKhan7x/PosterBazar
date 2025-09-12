@@ -569,51 +569,6 @@ export const createBillboard = async (billboardData: Partial<Billboard>): Promis
   return data;
 };
 
-// export const uploadBillboardImage = async (
-//   file: File,
-//   billboardId: string
-// ): Promise<string> => {
-//   try {
-//     if (!supabase) {
-//       console.warn('Supabase client not available, using fallback URL');
-//       const fileExt = file.name.split('.').pop();
-//       const fileName = `${billboardId}/${Date.now()}.${fileExt}`;
-//       return `https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&h=600&fit=crop`;
-//     }
-
-//     const fileExt = file.name.split('.').pop();
-//     const fileName = `${billboardId}/${Date.now()}.${fileExt}`;
-//     const filePath = fileName;
-
-//     // Try to upload to storage, fallback to mock URL if bucket doesn't exist
-//     try {
-//       const { error: uploadError } = await supabase.storage
-//         .from('billboards')
-//         .upload(filePath, file);
-
-//       if (uploadError) {
-//         if (uploadError.message.includes('Bucket not found')) {
-//           console.warn('Storage bucket not found, using fallback URL');
-//           return `https://images.pexels.com/photos/1666021/pexels-photo-1666021.jpeg?auto=compress&cs=tinysrgb&w=800&h=450&fit=crop`;
-//         }
-//         throw uploadError;
-//       }
-
-//       const { data } = supabase.storage
-//         .from('billboards')
-//         .getPublicUrl(filePath);
-
-//       return data.publicUrl;
-//     } catch (storageError) {
-//       console.warn('Storage service unavailable, using fallback URL:', storageError);
-//       return `https://images.pexels.com/photos/1666021/pexels-photo-1666021.jpeg?auto=compress&cs=tinysrgb&w=800&h=450&fit=crop`;
-//     }
-//   } catch (error) {
-//     console.error('Error uploading billboard image:', error);
-//     // Return fallback image URL on any error
-//     return `https://images.pexels.com/photos/1666021/pexels-photo-1666021.jpeg?auto=compress&cs=tinysrgb&w=800&h=450&fit=crop`;
-//   }
-// };
 
 
 export const uploadBillboardImage = async (
@@ -879,195 +834,6 @@ const getDefaultAdminStats = (): AdminDashboardStats => {
     pendingKYC: 0
   };
 };
-// export const getSubAdminDashboardStats = async (subAdminId: string): Promise<SubAdminDashboardStats> => {
-//   try {
-//     if (!supabase) {
-//       throw new Error('Database service not available');
-//     }
-
-//     // Enhanced debugging and error handling
-//     console.log('🔍 SubAdmin Dashboard Debug - Starting data fetch for:', subAdminId);
-    
-//     // First, verify the sub-admin exists and is active
-//     const { data: subAdminUser, error: userError } = await supabase
-//       .from('users')
-//       .select('id, name, email, role, is_active')
-//       .eq('id', subAdminId)
-//       .eq('role', 'sub_admin')
-//       .single();
-
-//     if (userError) {
-//       console.error('❌ SubAdmin user verification failed:', userError);
-//       throw new Error(`Sub-admin user not found or invalid: ${userError.message}`);
-//     }
-
-//     if (!subAdminUser.is_active) {
-//       console.warn('⚠️ SubAdmin account is inactive:', subAdminUser);
-//       throw new Error('Sub-admin account is inactive');
-//     }
-
-//     console.log('✅ SubAdmin user verified:', subAdminUser);
-
-//     // Get assigned billboards for this sub-admin with enhanced query
-//     const { data: assignments, error: assignmentsError } = await supabase
-//       .from('billboard_assignments')
-//       .select(`
-//         id,
-//         billboard_id,
-//         sub_admin_id,
-//         status,
-//         priority,
-//         assigned_at,
-//         assigned_by,
-//         due_date,
-//         notes,
-//         completed_at,
-//         is_active,
-//         billboard:billboards(
-//           id,
-//           title,
-//           location_address,
-//           state,
-//           city,
-//           status,
-//           approved_at,
-//           owner:users!billboards_owner_id_fkey(name)
-//         )
-//       `)
-//       .eq('sub_admin_id', subAdminId)
-//       .eq('is_active', true)
-//       .order('assigned_at', { ascending: false });
-
-//     if (assignmentsError) {
-//       console.error('❌ Assignments query failed:', assignmentsError);
-//       throw new Error(`Failed to fetch assignments: ${assignmentsError.message}`);
-//     }
-
-//     console.log('📊 Raw assignments data:', {
-//       subAdminId,
-//       assignmentsCount: assignments?.length || 0,
-//       assignments: assignments?.map(a => ({
-//         id: a.id,
-//         billboard_id: a.billboard_id,
-//         billboard_title: a.billboard?.title,
-//         status: a.status,
-//         priority: a.priority,
-//         assigned_at: a.assigned_at
-//       }))
-//     });
-
-//     // Validate assignment data integrity
-//     const validAssignments = (assignments || []).filter((assignment: any) => {
-//       const isValid = assignment.billboard && assignment.billboard.id;
-//       if (!isValid) {
-//         console.warn('⚠️ Invalid assignment found (missing billboard):', assignment);
-//       }
-//       return isValid;
-//     });
-
-//     console.log('✅ Valid assignments after filtering:', validAssignments.length);
-
-//     // Get site visits count for this month with better error handling
-//     const currentMonth = new Date();
-//     currentMonth.setDate(1);
-//     currentMonth.setHours(0, 0, 0, 0);
-
-//     let thisMonthVisits = 0;
-//     let completedVerifications = 0;
-//     let rejectedVerifications = 0;
-
-//     try {
-//       const { count: monthVisits } = await supabase
-//         .from('site_visits')
-//         .select('*', { count: 'exact', head: true })
-//         .eq('sub_admin_id', subAdminId)
-//         .gte('visit_date', currentMonth.toISOString());
-
-//       thisMonthVisits = monthVisits || 0;
-
-//       const { count: completedCount } = await supabase
-//         .from('site_visits')
-//         .select('*', { count: 'exact', head: true })
-//         .eq('sub_admin_id', subAdminId)
-//         .eq('is_verified', true);
-
-//       completedVerifications = completedCount || 0;
-
-//       const { count: rejectedCount } = await supabase
-//         .from('site_visits')
-//         .select('*', { count: 'exact', head: true })
-//         .eq('sub_admin_id', subAdminId)
-//         .eq('is_verified', false);
-
-//       rejectedVerifications = rejectedCount || 0;
-//     } catch (visitsError) {
-//       console.warn('⚠️ Error fetching site visits data:', visitsError);
-//       // Continue with default values
-//     }
-
-//     // Get site visits count for this month
-//     // Calculate stats from assignments
-//     const totalAssignments = validAssignments;
-//     const pendingAssignments = totalAssignments.filter((a: any) => a.status === 'pending');
-//     const completedAssignments = totalAssignments.filter((a: any) => a.status === 'completed');
-    
-//     console.log('📈 SubAdmin dashboard stats calculated:', {
-//       subAdminId,
-//       totalAssignments: totalAssignments.length,
-//       pendingAssignments: pendingAssignments.length,
-//       completedAssignments: completedAssignments.length,
-//       thisMonthVisits,
-//       completedVerifications,
-//       rejectedVerifications
-//     });
-    
-//     return {
-//       totalAssignedBillboards: totalAssignments.length,
-//       pendingVerifications: pendingAssignments.length,
-//       completedVerifications: completedVerifications + completedAssignments.length,
-//       rejectedVerifications,
-//       thisMonthVisits,
-//       averageVerificationTime: 2.5, // Mock average time in hours
-//       pendingBillboards: pendingAssignments.map((assignment: any) => ({
-//         id: assignment.billboard?.id || assignment.billboard_id,
-//         title: assignment.billboard?.title || 'Unknown Billboard',
-//         location_address: assignment.billboard?.location_address || 'Unknown Location',
-//         approved_at: assignment.assigned_at,
-//         owner: {
-//           name: assignment.billboard?.owner?.name || 'Unknown Owner'
-//         },
-//         priority: assignment.priority,
-//         assignment_id: assignment.id,
-//         distance: Math.floor(Math.random() * 50) + 5 // Mock distance for demo
-//       }))
-//     };
-//   } catch (error) {
-//     console.error('❌ SubAdmin dashboard stats error:', {
-//       subAdminId,
-//       error: error instanceof Error ? error.message : error,
-//       stack: error instanceof Error ? error.stack : undefined
-//     });
-//     throw error;
-//   }
-// };
-
-// const getPendingBillboardsForVerification = async (): Promise<any[]> => {
-//   const { data, error } = await supabase
-//     .from('billboards')
-//     .select(`
-//       id,
-//       title,
-//       location_address,
-//       approved_at,
-//       owner:users!billboards_owner_id_fkey(name)
-//     `)
-//     .eq('status', 'approved')
-//     .order('approved_at', { ascending: true });
-
-//   if (error) throw error;
-//   return data || [];
-// };
-
 
 
 
@@ -2071,3 +1837,12 @@ export const getSubAdminAssignments = async (subAdminId: string): Promise<any[]>
     return [];
   }
 };
+
+
+
+
+
+
+
+
+
